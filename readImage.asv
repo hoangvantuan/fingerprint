@@ -1,0 +1,3 @@
+function image = readImage(inputImage)
+    a = imread(inputImage);
+    image = double()
