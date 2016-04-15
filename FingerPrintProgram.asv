@@ -22,7 +22,7 @@ function varargout = FingerPrintProgram(varargin)
 
 % Edit the above text to modify the response to help FingerPrintProgram
 
-% Last Modified by GUIDE v2.5 25-Mar-2016 14:01:52
+% Last Modified by GUIDE v2.5 13-Apr-2016 22:49:36
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -78,10 +78,10 @@ function btnOpenImage_Callback(hObject, eventdata, handles)
 % hObject    handle to btnOpenImage (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global orgImage;
-orgImage = loadImage();
+global originImage;
+originImage = loadImage();
 axes(handles.axes1);
-imagesc(orgImage);
+imagesc(originImage);
 colormap(gray);
 
 
@@ -90,22 +90,12 @@ function btnHistEqua_Callback(hObject, eventdata, handles)
 % hObject    handle to btnHistEqua (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global orgImage;
-orgImage = histogramEqualization(orgImage);
+global originImage;
+originImage = histogramEqualization(originImage);
+originImage = fouriorTranform(originImage,0.35);
 axes(handles.axes2);
-imagesc(orgImage);
+imagesc(originImage);
 
-
-% --- Executes on button press in btnFT.
-function btnFT_Callback(hObject, eventdata, handles)
-% hObject    handle to btnFT (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-global orgImage;
-
-orgImage = fouriorTranform(orgImage,0.35);
-axes(handles.axes1);
-imagesc(orgImage);
 
 
 % --- Executes on button press in btnBinarization.
@@ -113,12 +103,11 @@ function btnBinarization_Callback(hObject, eventdata, handles)
 % hObject    handle to btnBinarization (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global orgImage;
+global originImage;
 
-%orgImage = binarization(double(orgImage));
-orgImage = adaptivethreshold(double(orgImage),16,0.03,0);
-axes(handles.axes2);
-imagesc(orgImage);
+originImage = binarization(double(originImage));
+axes(handles.axes1);
+imagesc(originImage);
 
 
 % --- Executes on button press in btnDirection.
@@ -126,9 +115,11 @@ function btnDirection_Callback(hObject, eventdata, handles)
 % hObject    handle to btnDirection (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global orgImage,b,a;
-axes(handles.axes1);
-[b,a] = direction(orgImage,16);
+global originImage;
+global outArea;
+global outBound;
+axes(handles.axes2);
+[outBound,outArea] = direction(c,16);
 
 
 % --- Executes on button press in pushbutton7.
@@ -136,3 +127,60 @@ function pushbutton7_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton7 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+global originImage;
+global outArea;
+global outBound;
+global process1Image;
+
+axes(handles.axes1);
+[process1Image,outBound,outArea] = ROIArea(originImage,outBound,outArea);
+
+% --- Executes on button press in pushbutton8.
+function pushbutton8_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton8 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global process1Image;
+global process2Image;
+
+process2Image = im2double(bwmorph(process1Image,'thin',Inf));
+process2Image = im2double(bwmorph(process2Image,'clean'));
+process2Image = im2double(bwmorph(process2Image,'hbreak'));
+process2Image = im2double(bwmorph(process2Image,'spur'));
+axes(handles.axes2);
+imagesc(d,[0,1]);
+
+
+% --- Executes on button press in pushbutton9.
+function pushbutton9_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton9 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global process2Image;
+global outBound;
+global outArea;
+global end_list1;
+global branch_list1;
+global ridgeMap1;
+global edgeWidth;
+
+[end_list1,branch_list1,ridgeMap1,edgeWidth]=markMinutia(d,b,a,16);
+axes(handles.axes1);
+showMinutia(d,end_list1,branch_list1);
+
+% --- Executes on button press in pushbutton10.
+function pushbutton10_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton10 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global d;
+global a;
+global end_list1;
+global branch_list1
+global ridgeMap1;
+global edgeWidth;
+
+[pathMap1,real_end1,real_branch1]=falseMinutiaRemove(d,end_list1,branch_list1,a,ridgeMap1,edgeWidth);
+
+axes(handles.axes2);
+showMinutia(d,real_end1,real_branch1);
