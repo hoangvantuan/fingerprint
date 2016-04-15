@@ -13,7 +13,8 @@ function varargout = FingerPrintProgram(varargin)
 %      existing singleton*.  Starting from the left, property value pairs are
 %      applied to the GUI before FingerPrintProgram_OpeningFcn gets called.  An
 %      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to FingerPrintProgram_OpeningFcn via varargin.
+%      stop.  All inputs are passed to FingerPrintProgram_OpeningFcn via
+%      varargin.
 %
 %      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
 %      instance to run (singleton)".
@@ -22,7 +23,7 @@ function varargout = FingerPrintProgram(varargin)
 
 % Edit the above text to modify the response to help FingerPrintProgram
 
-% Last Modified by GUIDE v2.5 13-Apr-2016 22:49:36
+% Last Modified by GUIDE v2.5 15-Apr-2016 21:43:29
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -85,14 +86,14 @@ imagesc(originImage);
 colormap(gray);
 
 
-% --- Executes on button press in btnHistEqua.
-function btnHistEqua_Callback(hObject, eventdata, handles)
-% hObject    handle to btnHistEqua (see GCBO)
+% --- Executes on button press in btnEnhancement.
+function btnEnhancement_Callback(hObject, eventdata, handles)
+% hObject    handle to btnEnhancement (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global originImage;
 originImage = histogramEqualization(originImage);
-originImage = fouriorTranform(originImage,0.35);
+originImage = fouriorTranform(originImage,0.45);
 axes(handles.axes2);
 imagesc(originImage);
 
@@ -122,9 +123,9 @@ axes(handles.axes2);
 [outBound,outArea] = direction(originImage,16);
 
 
-% --- Executes on button press in pushbutton7.
-function pushbutton7_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton7 (see GCBO)
+% --- Executes on button press in btnROIArea.
+function btnROIArea_Callback(hObject, eventdata, handles)
+% hObject    handle to btnROIArea (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global originImage;
@@ -135,9 +136,9 @@ global process1Image;
 axes(handles.axes1);
 [process1Image,outBound,outArea] = ROIArea(originImage,outBound,outArea);
 
-% --- Executes on button press in pushbutton8.
-function pushbutton8_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton8 (see GCBO)
+% --- Executes on button press in btnThinning.
+function btnThinning_Callback(hObject, eventdata, handles)
+% hObject    handle to btnThinning (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global process1Image;
@@ -151,9 +152,9 @@ axes(handles.axes2);
 imagesc(process2Image,[0,1]);
 
 
-% --- Executes on button press in pushbutton9.
-function pushbutton9_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton9 (see GCBO)
+% --- Executes on button press in btnMarking.
+function btnMarking_Callback(hObject, eventdata, handles)
+% hObject    handle to btnMarking (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global process2Image;
@@ -168,9 +169,9 @@ global edgeWidth;
 axes(handles.axes1);
 showMinutia(process2Image,endList,branchList);
 
-% --- Executes on button press in pushbutton10.
-function pushbutton10_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton10 (see GCBO)
+% --- Executes on button press in btnFalseRemove.
+function btnFalseRemove_Callback(hObject, eventdata, handles)
+% hObject    handle to btnFalseRemove (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global process2Image;
@@ -182,8 +183,31 @@ global edgeWidth;
 global pathMap;
 global endListReal;
 global branchListReal;
-
+global pathMap;
+global endListReal;
 [pathMap,endListReal,branchListReal]=falseMinutiaRemove(process2Image,endList,branchList,outArea,ridgeMap,edgeWidth);
 
 axes(handles.axes2);
 showMinutia(process2Image,endListReal,branchListReal);
+
+
+
+% --- Executes on button press in btnSave.
+function btnSave_Callback(hObject, eventdata, handles)
+% hObject    handle to btnSave (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global pathMap;
+global endListReal;
+saveFinger(pathMap, endListReal);
+
+
+% --- Executes on button press in btnMatch.
+function btnMatch_Callback(hObject, eventdata, handles)
+% hObject    handle to btnMatch (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+finger1=fingerTemplateRead;
+finger2=fingerTemplateRead;
+percent_match=match_end(finger1,finger2,10);
