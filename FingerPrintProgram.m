@@ -120,7 +120,7 @@ global originImage;
 global outArea;
 global outBound;
 axes(handles.axes2);
-[outBound,outArea] = direction(originImage,16);
+[outBound,outArea] = direction2(originImage,16);
 
 
 % --- Executes on button press in btnROIArea.
