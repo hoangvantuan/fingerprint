@@ -23,7 +23,7 @@ function varargout = FingerPrintProgram(varargin)
 
 % Edit the above text to modify the response to help FingerPrintProgram
 
-% Last Modified by GUIDE v2.5 15-Apr-2016 21:43:29
+% Last Modified by GUIDE v2.5 04-May-2016 11:25:15
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -73,7 +73,7 @@ function varargout = FingerPrintProgram_OutputFcn(hObject, eventdata, handles)
 % Get default command line output from handles structure
 varargout{1} = handles.output;
 
-
+%% OPEN IMAGE
 % --- Executes on button press in btnOpenImage.
 function btnOpenImage_Callback(hObject, eventdata, handles)
 % hObject    handle to btnOpenImage (see GCBO)
@@ -85,7 +85,7 @@ axes(handles.axes1);
 imagesc(originImage);
 colormap(gray);
 
-
+%% HISTOGRAM EQUALOZATION & FOURIOR TRANFORM
 % --- Executes on button press in btnEnhancement.
 function btnEnhancement_Callback(hObject, eventdata, handles)
 % hObject    handle to btnEnhancement (see GCBO)
@@ -98,7 +98,7 @@ axes(handles.axes2);
 imagesc(originImage);
 
 
-
+%% BINAZIATION
 % --- Executes on button press in btnBinarization.
 function btnBinarization_Callback(hObject, eventdata, handles)
 % hObject    handle to btnBinarization (see GCBO)
@@ -110,7 +110,7 @@ originImage = binarization(double(originImage));
 axes(handles.axes1);
 imagesc(originImage);
 
-
+%% DIRECTION & GET ROI
 % --- Executes on button press in btnDirection.
 function btnDirection_Callback(hObject, eventdata, handles)
 % hObject    handle to btnDirection (see GCBO)
@@ -120,9 +120,10 @@ global originImage;
 global outArea;
 global outBound;
 axes(handles.axes2);
-[outBound,outArea] = direction2(originImage,16);
+[outBound,outArea] = direction(originImage,16);
 
 
+%% REGION OF INTEREST DRAW
 % --- Executes on button press in btnROIArea.
 function btnROIArea_Callback(hObject, eventdata, handles)
 % hObject    handle to btnROIArea (see GCBO)
@@ -136,6 +137,7 @@ global process1Image;
 axes(handles.axes1);
 [process1Image,outBound,outArea] = ROIArea(originImage,outBound,outArea);
 
+%% THINING
 % --- Executes on button press in btnThinning.
 function btnThinning_Callback(hObject, eventdata, handles)
 % hObject    handle to btnThinning (see GCBO)
@@ -151,7 +153,7 @@ process2Image = im2double(bwmorph(process2Image,'spur'));
 axes(handles.axes2);
 imagesc(process2Image,[0,1]);
 
-
+%% MARKING
 % --- Executes on button press in btnMarking.
 function btnMarking_Callback(hObject, eventdata, handles)
 % hObject    handle to btnMarking (see GCBO)
@@ -169,6 +171,7 @@ global edgeWidth;
 axes(handles.axes1);
 showMinutia(process2Image,endList,branchList);
 
+%% FALSE REMOVE
 % --- Executes on button press in btnFalseRemove.
 function btnFalseRemove_Callback(hObject, eventdata, handles)
 % hObject    handle to btnFalseRemove (see GCBO)
@@ -183,7 +186,6 @@ global edgeWidth;
 global pathMap;
 global endListReal;
 global branchListReal;
-global pathMap;
 global endListReal;
 [pathMap,endListReal,branchListReal]=falseMinutiaRemove(process2Image,endList,branchList,outArea,ridgeMap,edgeWidth);
 
@@ -191,7 +193,7 @@ axes(handles.axes2);
 showMinutia(process2Image,endListReal,branchListReal);
 
 
-
+%%  SAVE
 % --- Executes on button press in btnSave.
 function btnSave_Callback(hObject, eventdata, handles)
 % hObject    handle to btnSave (see GCBO)
@@ -199,9 +201,10 @@ function btnSave_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 global pathMap;
 global endListReal;
+% lýu l?i m?ng path và các ði?m minutiae 
 saveFinger(pathMap, endListReal);
 
-
+%% MATCH
 % --- Executes on button press in btnMatch.
 function btnMatch_Callback(hObject, eventdata, handles)
 % hObject    handle to btnMatch (see GCBO)

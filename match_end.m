@@ -23,10 +23,7 @@ function [percent_match]=match_end(template1,template2,edgeWidth,noShow)
 %	 popup dialog showing final matching percentage. The value can be simply set to 0.
 %	 This function is used for batch process.
 
-%Honors Project 2001~2002
-%wuzhili 99050056
-%comp sci HKBU
-%last update 19/April/2002
+
 
 
 %   Decompose the template file into minutia and ridge matrixes seperately
