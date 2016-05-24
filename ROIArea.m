@@ -1,4 +1,4 @@
-function [roiImg,roiBound,roiArea] = ROIArea(in,inBound,inArea)
+function [roiImg,roiBound,roiArea] = ROIArea(in,inBound,inArea,noShow)
 
 %l?y kích thý?c c?a ?nh theo pixel
 [iw,ih]=size(in);
@@ -69,6 +69,7 @@ roiArea = inArea(upper:bottom,left:right);
 
         
 %inner area --> các giá tr? c?a v? trí biên = -1
+
 roiArea = im2double(roiArea) - im2double(roiBound);
 
 if nargin == 3

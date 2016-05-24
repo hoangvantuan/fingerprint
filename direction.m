@@ -1,4 +1,4 @@
-function [p,z] = direction(image,blocksize)
+function [p,z] = direction(image,blocksize,noShow)
 
 
 [w,h] = size(image);
@@ -77,14 +77,13 @@ for i=1:W:w
 end;
 
 
-%show direction
-
-    imagesc(direct);
+if nargin == 2
+     imagesc(direct);
 	hold on;
-	[u,v] = pol2cart(center(:,3),8);
-    quiver(center(:,2),center(:,1),u,v,0,'g');
-    hold off;
-
+ 	[u,v] = pol2cart(center(:,3),8);
+     quiver(center(:,2),center(:,1),u,v,0,'g');
+     hold off;
+end
 
 x = bwlabel(blockIndex,4);
 %map = [0 0 0;jet(3)];

@@ -7,11 +7,8 @@ function [newXY] = MinuOrigin_TransAll(real_end,k)
 %  Also see MinuOrigin
 %  The difference between MinuOrigin and MinuOrigin_all is that the orientation
 %  of each minutia is also adjusted with the origin minutia
-%Honors Project 2001~2002
-%wuzhili 99050056
-%comp sci HKBU
-%last update 19/April/2002
 
+% l?y góc c?a minutiae k
 theta = real_end(k,3);
 
 if theta <0
@@ -20,7 +17,7 @@ end;
 
 theta1=pi/2-theta;
 
-
+% ma tr?n quay 
 rotate_mat=[cos(theta1),-sin(theta1),0;sin(theta1),cos(theta1),0;0,0,1];
 
       toBeTransformedPointSet = real_end';
@@ -34,7 +31,7 @@ rotate_mat=[cos(theta1),-sin(theta1),0;sin(theta1),cos(theta1),0;0,0,1];
       newXY = rotate_mat*translatedPointSet;
       
       %ensure the direction is in the domain[-pi,pi]
-      
+      % ch?c ch?n góc ð?nh hý?ng n?m trong kho?ng -pi,pi
       for i=1:tonyTrickLength
          if or(newXY(3,i)>pi,newXY(3,i)<-pi)
             newXY(3,i) = 2*pi - sign(newXY(3,i))*newXY(3,i);

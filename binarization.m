@@ -1,6 +1,6 @@
 function o = binarization(a)
 
-W = 32;
+W = 16;
 [w,h] = size(a);
 o = zeros(w,h);
 

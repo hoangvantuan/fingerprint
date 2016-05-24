@@ -27,4 +27,4 @@ for i=1:32:w1
 end;
 
 final=inner*255;
-%final=histeq(uint8(final));
+final=histeq(uint8(final));
