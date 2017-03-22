@@ -1,0 +1,28 @@
+function [] = onevsall(templatefile)
+addpath('match');
+template=load(char(templatefile));
+listTemplate = dir('match');
+k = size(listTemplate);
+result = [];
+percent_max = 0;
+id_max=0;
+num_max=0;
+for i =3 : k
+id = str2double(char(listTemplate(i).name(1:3)));
+num = str2double(char(listTemplate(i).name(5)));
+template2 = load(char(strcat('match/',listTemplate(i).name)));
+
+percent1 = match_end(template,template2,10);
+percent2 = match_end(template2,template,10);
+if percent1 >= percent2
+    percent = 
+if percent > percent_max & percent ~=100
+id_max = id;
+num_max = num;
+percent_max = percent;
+end
+fprintf('%d \t %d \t %f\n',id,num,percent)
+
+end
+fprintf('\n\n%d \t %d \t %f\n',id_max,num_max,percent_max)
+end

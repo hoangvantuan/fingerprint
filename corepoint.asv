@@ -1,0 +1,8 @@
+function [i,j]=corepoint(end_list)
+k = size(end_list,1);
+[i,j] = [0,0];
+[i,j] = [(end_list(1,1)+end_list(2,1))/2,(end_list(1,2)+end_list(2,2))/2];
+for e 3 : k
+    [i,j] = [(i+end_list(k,1)/2,(j+end_list(k,2)/2];
+end;
+end
